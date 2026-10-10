@@ -89,7 +89,7 @@ const ROLES = [
 const PRICING = [
   {
     tier: "Starter",
-    price: "[YOUR PRICE]",
+    price: "Rs. 3,500",
     blurb: "For a single gym just getting digital",
     bullets: ["Admin, trainer & member dashboards", "Up to 150 active members", "Manual payment tracking", "Email notifications"],
     cta: "Choose Starter",
@@ -97,7 +97,7 @@ const PRICING = [
   },
   {
     tier: "Growth",
-    price: "[YOUR PRICE]",
+    price: "Rs. 7,999",
     blurb: "For a gym ready to take real payments",
     bullets: [
       "Everything in Starter",
@@ -520,10 +520,10 @@ export default function Landing() {
       <section id="pricing" className="px-6 py-16 max-w-6xl mx-auto">
         <Reveal viewport className="max-w-xl mb-12">
           <h2 className="text-3xl sm:text-4xl font-semibold mb-3" style={{ fontFamily: "var(--landing-font-head)" }}>
-            Simple pricing, once it's real
+            Simple, honest pricing
           </h2>
           <p className="text-base" style={{ color: "var(--landing-muted)" }}>
-            Figures below are placeholders — drop in real numbers when the launch price is locked in.
+            Monthly plans, billed in PKR — no setup fee, cancel anytime.
           </p>
         </Reveal>
         <Stagger viewport className="grid grid-cols-1 sm:grid-cols-3 gap-5">
