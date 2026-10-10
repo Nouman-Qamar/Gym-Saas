@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { requireUser, roleHome } from "@/lib/auth/current-user";
+import { getCurrentUser, requireUser, roleHome } from "@/lib/auth/current-user";
 import type { ActionState } from "./auth";
 
 const onboardingSchema = z.object({
@@ -16,7 +16,13 @@ const onboardingSchema = z.object({
 const VALID_VIBES = ["EMBER", "BADDIE", "ELECTRIC"] as const;
 
 export async function completeOnboarding(_prev: ActionState, formData: FormData): Promise<ActionState> {
-  const user = await requireUser();
+  // Not requireUser() here on purpose: requireUser() redirects anyone with
+  // onboarded === false straight to /onboarding — which is every user who
+  // lands on THIS page. That turned "Continue" into an infinite bounce back
+  // to /onboarding before the DB write below ever ran. getCurrentUser() has
+  // no such gate, so we just need our own "must be logged in" check.
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
   const parsed = onboardingSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { error: "Please choose an option to continue." };
 
@@ -29,6 +35,7 @@ export async function completeOnboarding(_prev: ActionState, formData: FormData)
     .set({ gender: parsed.data.gender, themeOverride: vibe, onboarded: true })
     .where(eq(users.id, user.id));
 
+  revalidatePath("/", "layout");
   redirect(roleHome(user.role as "ADMIN" | "TRAINER" | "MEMBER"));
 }
 
