@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   Dumbbell,
   Layers,
@@ -21,6 +21,7 @@ import {
   TrendingUp,
   Flame,
   Clock3,
+  Zap,
 } from "lucide-react";
 import { THEME_META } from "@/lib/theme";
 import { Reveal, Stagger, StaggerItem, CountUp } from "@/components/ui/motion";
@@ -147,6 +148,12 @@ export default function Landing() {
   const [theme, setTheme] = useState<LandingTheme>("dark");
   const isLight = theme === "light";
 
+  // Scroll-driven "power meter" — fills across the top of the page as you
+  // scroll, like a workout-intensity gauge. Smoothed with a spring so it
+  // feels charged rather than robotic.
+  const { scrollYProgress } = useScroll();
+  const powerBarScale = useSpring(scrollYProgress, { stiffness: 120, damping: 24, restDelta: 0.001 });
+
   return (
     <main
       data-landing-theme={theme}
@@ -154,11 +161,29 @@ export default function Landing() {
       style={{ background: "var(--landing-bg)", color: "var(--landing-text)", fontFamily: "var(--landing-font-body)" }}
     >
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
+      {/* Scroll power meter — a thin glowing bar that charges up left-to-right
+          as you scroll down the page, like a workout intensity gauge. */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[3px] z-30 origin-left"
+        style={{
+          scaleX: powerBarScale,
+          background: "linear-gradient(90deg, var(--landing-grad-from), var(--landing-accent), var(--landing-grad-to))",
+          boxShadow: "0 0 10px var(--landing-accent), 0 0 2px var(--landing-accent)",
+        }}
+      />
       <header className="sticky top-0 z-20 border-b" style={{ borderColor: "var(--landing-card-border)", background: "var(--landing-bg)" }}>
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
           <Link href="/" className="flex items-center gap-2.5">
-            <span className="h-9 w-9 rounded-xl flex items-center justify-center" style={{ background: "var(--landing-accent)" }}>
+            <span className="relative h-9 w-9 rounded-xl flex items-center justify-center" style={{ background: "var(--landing-accent)" }}>
               <Dumbbell size={18} style={{ color: "var(--landing-on-accent)" }} />
+              <motion.span
+                className="absolute -top-1.5 -right-1.5 flex items-center justify-center h-4 w-4 rounded-full"
+                style={{ background: "var(--landing-bg)" }}
+                animate={{ opacity: [0.5, 1, 0.5], scale: [0.85, 1.1, 0.85] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Zap size={10} style={{ color: "var(--landing-accent)" }} fill="currentColor" strokeWidth={0} />
+              </motion.span>
             </span>
             <span className="text-lg font-semibold" style={{ fontFamily: "var(--landing-font-head)" }}>
               {APP_NAME}
