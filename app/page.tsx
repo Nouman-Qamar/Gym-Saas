@@ -18,6 +18,9 @@ import {
   Check,
   Star,
   PlayCircle,
+  TrendingUp,
+  Flame,
+  Clock3,
 } from "lucide-react";
 import { THEME_META } from "@/lib/theme";
 import { Reveal, Stagger, StaggerItem, CountUp } from "@/components/ui/motion";
@@ -353,49 +356,85 @@ export default function Landing() {
             </Stagger>
           </div>
 
-          {/* Decorative stacked preview — illustrative, not real product data */}
+          {/* Decorative stacked preview — illustrative, not real product data.
+              A big low-opacity dumbbell mark fills the space behind the cards
+              so this reads as "gym" at a glance, and each card now carries a
+              role-relevant icon + content instead of plain placeholder bars. */}
           <div className="relative flex-1 min-w-[320px] h-[420px] hidden md:block">
+            <Dumbbell
+              className="absolute -top-6 right-0 pointer-events-none"
+              size={320}
+              strokeWidth={1}
+              style={{ color: "var(--landing-accent)", opacity: 0.08, transform: "rotate(-18deg)" }}
+            />
             <div
               className="absolute top-0 left-0 w-64 h-40 rounded-[var(--landing-radius-card)] border p-5 shadow-xl"
               style={{ background: "var(--landing-card)", borderColor: "var(--landing-card-border)" }}
             >
-              <p className="text-[10px] font-bold mb-3" style={{ color: "var(--landing-muted)" }}>
-                ADMIN
-              </p>
-              <div className="flex gap-2">
-                <div className="flex-1 h-11 rounded-xl" style={{ background: "var(--landing-accent-soft)" }} />
-                <div className="flex-1 h-11 rounded-xl" style={{ background: "var(--landing-accent-soft)" }} />
+              <div className="flex items-center gap-1.5 mb-3">
+                <TrendingUp size={12} style={{ color: "var(--landing-accent)" }} />
+                <p className="text-[10px] font-bold" style={{ color: "var(--landing-muted)" }}>
+                  ADMIN · Revenue
+                </p>
               </div>
-              <div className="mt-3 h-2 w-2/3 rounded-full" style={{ background: "var(--landing-accent)" }} />
+              <div className="flex items-end gap-2 h-11">
+                {[40, 65, 50, 85, 70].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-t-md"
+                    style={{ height: `${h}%`, background: i === 3 ? "var(--landing-accent)" : "var(--landing-accent-soft)" }}
+                  />
+                ))}
+              </div>
+              <p className="mt-3 text-[11px] font-semibold" style={{ color: "var(--landing-accent)" }}>
+                +18% this month
+              </p>
             </div>
             <div
               className="absolute top-[100px] left-[150px] w-64 h-40 rounded-[var(--landing-radius-card)] border p-5 shadow-xl"
               style={{ background: "var(--landing-card)", borderColor: "var(--landing-card-border)" }}
             >
-              <p className="text-[10px] font-bold mb-3" style={{ color: "var(--landing-muted)" }}>
-                TRAINER
-              </p>
-              <div className="flex flex-col gap-2">
-                <div className="h-2 w-[85%] rounded-full" style={{ background: "var(--landing-accent-soft)" }} />
-                <div className="h-2 w-3/5 rounded-full" style={{ background: "var(--landing-accent-soft)" }} />
-                <div className="h-2 w-[72%] rounded-full" style={{ background: "var(--landing-accent-soft)" }} />
+              <div className="flex items-center gap-1.5 mb-3">
+                <Dumbbell size={12} style={{ color: "var(--landing-accent)" }} />
+                <p className="text-[10px] font-bold" style={{ color: "var(--landing-muted)" }}>
+                  TRAINER · Today
+                </p>
+              </div>
+              <div className="flex flex-col gap-2.5">
+                {["6:00 AM — Strength", "5:00 PM — HIIT circuit", "7:00 PM — Yoga flow"].map((cls) => (
+                  <div key={cls} className="flex items-center gap-1.5">
+                    <Clock3 size={10} style={{ color: "var(--landing-muted)" }} />
+                    <span className="text-[10.5px]" style={{ color: "var(--landing-text)" }}>
+                      {cls}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
             <div
               className="absolute top-[210px] left-0 w-64 h-40 rounded-[var(--landing-radius-card)] border p-5 shadow-xl"
               style={{ background: "var(--landing-card)", borderColor: "var(--landing-card-border)" }}
             >
-              <p className="text-[10px] font-bold mb-3" style={{ color: "var(--landing-muted)" }}>
-                MEMBER
-              </p>
+              <div className="flex items-center gap-1.5 mb-3">
+                <Flame size={12} style={{ color: "var(--landing-accent)" }} />
+                <p className="text-[10px] font-bold" style={{ color: "var(--landing-muted)" }}>
+                  MEMBER · Streak
+                </p>
+              </div>
               <div className="flex items-center gap-3">
                 <div
-                  className="h-11 w-11 rounded-full"
+                  className="h-11 w-11 rounded-full flex items-center justify-center"
                   style={{ background: "linear-gradient(135deg, var(--landing-grad-from), var(--landing-grad-to))" }}
-                />
-                <div className="flex-1 flex flex-col gap-1.5">
-                  <div className="h-1.5 w-[78%] rounded-full" style={{ background: "var(--landing-accent-soft)" }} />
-                  <div className="h-1.5 w-1/2 rounded-full" style={{ background: "var(--landing-accent-soft)" }} />
+                >
+                  <Flame size={18} style={{ color: "var(--landing-on-grad)" }} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-lg font-bold" style={{ fontFamily: "var(--landing-font-head)" }}>
+                    7-day streak
+                  </p>
+                  <p className="text-[10.5px]" style={{ color: "var(--landing-muted)" }}>
+                    Checked in every day this week
+                  </p>
                 </div>
               </div>
             </div>
